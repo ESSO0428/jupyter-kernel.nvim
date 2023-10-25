@@ -34,7 +34,8 @@ function M.inspect()
   if inspect.status ~= "ok" then
     out = inspect.status
   elseif inspect.found ~= true then
-    out = "_No information from kernel_"
+    out = ""
+    vim.cmd('lua vim.lsp.buf.hover()')
   else
     local sections = vim.split(inspect.data["text/plain"], "\x1b%[0;31m")
     for _, section in ipairs(sections) do

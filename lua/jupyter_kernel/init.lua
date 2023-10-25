@@ -35,7 +35,6 @@ function M.inspect()
     out = inspect.status
   elseif inspect.found ~= true then
     out = ""
-    vim.cmd('lua vim.lsp.buf.hover()')
   else
     local sections = vim.split(inspect.data["text/plain"], "\x1b%[0;31m")
     for _, section in ipairs(sections) do
@@ -70,7 +69,11 @@ function M.inspect()
 
   local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(out)
   markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)
-  vim.lsp.util.open_floating_preview(markdown_lines, "markdown", M.opts.inspect.window)
+  if inspect.found ~= true then
+    vim.cmd('lua vim.lsp.buf.hover()')
+  else
+    vim.lsp.util.open_floating_preview(markdown_lines, "markdown", M.opts.inspect.window)
+  end
 end
 
 function M.execute(opts)
